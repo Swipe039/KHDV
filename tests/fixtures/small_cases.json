@@ -1,0 +1,59 @@
+{
+  "cases": [
+    {
+      "name": "fairness_beats_length",
+      "capacity": 1,
+      "blocks": [
+        {"block_id": "A1", "student_id": "SV_A", "sessions": ["S1", "S2", "S3"]},
+        {"block_id": "B1", "student_id": "SV_B", "sessions": ["S1", "S2"]},
+        {"block_id": "C1", "student_id": "SV_C", "sessions": ["S3", "S4"]}
+      ],
+      "expected": {"granted": ["B1", "C1"], "denied": ["A1"]}
+    },
+    {
+      "name": "longer_block_wins_against_1_2",
+      "capacity": 1,
+      "blocks": [
+        {"block_id": "A1", "student_id": "SV_A", "sessions": ["S1", "S2", "S3"]},
+        {"block_id": "B1", "student_id": "SV_B", "sessions": ["S1", "S2"]}
+      ],
+      "expected": {"granted": ["A1"], "denied": ["B1"]}
+    },
+    {
+      "name": "longer_block_wins_against_3_4",
+      "capacity": 1,
+      "blocks": [
+        {"block_id": "A1", "student_id": "SV_A", "sessions": ["S1", "S2", "S3"]},
+        {"block_id": "C1", "student_id": "SV_C", "sessions": ["S3", "S4"]}
+      ],
+      "expected": {"granted": ["A1"], "denied": ["C1"]}
+    },
+    {
+      "name": "all_fit",
+      "capacity": 2,
+      "blocks": [
+        {"block_id": "A1", "student_id": "SV_A", "sessions": ["S1", "S2", "S3"]},
+        {"block_id": "B1", "student_id": "SV_B", "sessions": ["S1", "S2"]},
+        {"block_id": "C1", "student_id": "SV_C", "sessions": ["S3", "S4"]}
+      ],
+      "expected": {"granted": ["A1", "B1", "C1"], "denied": []}
+    },
+    {
+      "name": "capacity_zero",
+      "capacity": 0,
+      "blocks": [
+        {"block_id": "A1", "student_id": "SV_A", "sessions": ["S1", "S2"]}
+      ],
+      "expected": {"granted": [], "denied": ["A1"]}
+    },
+    {
+      "name": "random_tie_same_length",
+      "capacity": 1,
+      "blocks": [
+        {"block_id": "P1", "student_id": "SV_P", "sessions": ["S1", "S2"]},
+        {"block_id": "Q1", "student_id": "SV_Q", "sessions": ["S1", "S2"]}
+      ],
+      "expected": {"granted_count": 1}
+    }
+  ]
+}

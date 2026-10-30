@@ -35,8 +35,8 @@ class SolveInput:
     seed: int = 0
     
     def __post_init__(self):
-        if self.capacity <= 0:
-            raise ValueError("Capacity must be > 0")
+        if self.capacity < 0:
+            raise ValueError("Capacity must be >= 0")
         block_ids = [block.block_id for block in self.blocks]
         if len(block_ids) != len(set(block_ids)):
             raise ValueError("There are duplicate blocks") 
