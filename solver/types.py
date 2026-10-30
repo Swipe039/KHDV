@@ -44,7 +44,7 @@ class SolveInput:
 @dataclass
 class SolveResult:
     status: dict[str, PermitStatus]  # Gán cho từng block_id là granted / denied
-    granted_per_student: dict[str, int]  # Số lượng block đã granted cho mỗi svien
+    granted_per_student: dict[str, int]  # Số lượng block đã granted cho mỗi SV
     occupancy: dict[str, int]  # Với mỗi session_id, lấy số xe hiện có trong bãi
     # fairness_levels[j-1] = số sinh viên đạt mức j ở tầng công bằng
     fairness_levels: list[int] = field(default_factory=list)
