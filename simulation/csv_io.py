@@ -48,6 +48,9 @@ def load_solve_input(directory, capacity, seed=0):
     entries = read_timetable(directory)
     wants = read_requests(directory)
     blocks = build_blocks(entries)
+    block_ids = {block.block_id for block in blocks}
+    if set(wants) != block_ids:
+        raise ValueError("requests.csv does not match blocks built from timetable.csv")
     selected_blocks = tuple(block for block in blocks if wants.get(block.block_id, False))
 
     return SolveInput(blocks=selected_blocks, capacity=capacity, seed=seed)

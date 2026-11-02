@@ -31,7 +31,7 @@ def build_blocks(entries):
         for run in split_into_runs(sorted(orders_by_student_day[key])):
             blocks.append(
                 Block(
-                    block_id=f"{student_id}:{day}:{run[0]}",
+                    block_id=f"{student_id}:{day}:{run[0]}-{run[-1]}",
                     student_id=student_id,
                     sessions=tuple(make_session_id(day, order) for order in run),
                 )
