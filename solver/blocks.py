@@ -1,4 +1,5 @@
 from collections import defaultdict
+
 from solver.types import Block
 
 

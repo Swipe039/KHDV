@@ -3,7 +3,7 @@ from solver.blocks import build_blocks
 
 DEFAULT_DAYS = ("T2", "T3", "T4", "T5", "T6", "T7")
 
-def generate_timetable(num_students, days, sessions_per_day, attend_prob, rng):
+def generate_timetable(num_students, days, sessions_per_day, attend_rate, rng):
     """
     Khởi tạo TKB ngẫu nhiên cho SV
     """
@@ -12,7 +12,7 @@ def generate_timetable(num_students, days, sessions_per_day, attend_prob, rng):
         student_id = f"{i:04d}"
 
         for day in days:
-            if rng.random() >= attend_prob:
+            if rng.random() >= attend_rate:
                 continue
             count = rng.randint(1, sessions_per_day)
             orders = rng.sample(range(1, sessions_per_day + 1), count)
@@ -22,23 +22,23 @@ def generate_timetable(num_students, days, sessions_per_day, attend_prob, rng):
 
     return entries
 
-def generate_requests(blocks, wants_prob, rng):
+def generate_requests(blocks, wants_rate, rng):
     """
     Khởi tạo lịch muốn dky đi xe máy ngẫu nhiên từ TKB
     """
-    return [(block.block_id, rng.random() < wants_prob) for block in blocks]
+    return [(block.block_id, rng.random() < wants_rate) for block in blocks]
 
 def generate_dataset(
     num_students,
     days=DEFAULT_DAYS,
     sessions_per_day=4,
-    attend_prob=0.6,
-    wants_prob=0.8,
+    attend_rate=0.6,
+    wants_rate=0.8,
     seed=0
 ):
     rng = random.Random(seed)
-    entries = generate_timetable(num_students, days, sessions_per_day, attend_prob, rng)
+    entries = generate_timetable(num_students, days, sessions_per_day, attend_rate, rng)
     blocks = build_blocks(entries)
-    requests = generate_requests(blocks, wants_prob, rng)
+    requests = generate_requests(blocks, wants_rate, rng)
 
-    return requests
+    return entries, requests
