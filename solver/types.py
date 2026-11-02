@@ -6,7 +6,6 @@ from typing import Literal
 
 PermitStatus = Literal["granted", "denied"] #Trạng thái Chấp nhận/Từ chối đăng ký
 
-
 @dataclass(frozen=True)
 class Block:
     """
@@ -51,7 +50,7 @@ class SolveResult:
 
 ###
 def validate(inp: SolveInput) -> None:
-    """Kiểm tra đầu vào, báo lỗi sớm thay vì để bộ giải trả kết quả sai."""
+    """Kiểm tra đầu vào, báo lỗi sớm thay vì để solver trả kết quả sai."""
     if inp.capacity < 0:
         raise ValueError("capacity phải >= 0")
     ids = [b.block_id for b in inp.blocks]

@@ -1,6 +1,5 @@
 from ortools.sat.python import cp_model
 
-
 def group_block_ids_by_session(blocks):
     """
     Kiểm tra các sessions đang ở trong block nào
@@ -10,7 +9,6 @@ def group_block_ids_by_session(blocks):
         for session in block.sessions:
             block_ids_by_session.setdefault(session, []).append(block.block_id)
     return block_ids_by_session
-
 
 def build_model(solve_input):
     """

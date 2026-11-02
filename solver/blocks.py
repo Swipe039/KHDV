@@ -2,10 +2,8 @@ from collections import defaultdict
 
 from solver.types import Block
 
-
 def make_session_id(day, order):
     return f"{day}-{order}"
-
 
 def split_into_runs(sorted_orders):
     """
@@ -18,7 +16,6 @@ def split_into_runs(sorted_orders):
         else:
             runs.append([order])
     return runs
-
 
 def build_blocks(entries):
     """

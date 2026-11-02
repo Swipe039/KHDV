@@ -4,7 +4,6 @@ from solver.types import Block, SolveInput
 
 FIXTURE_PATH = Path(__file__).parent / "fixtures" / "small_cases.json"
 
-
 def load_cases():
     with open(FIXTURE_PATH, encoding="utf-8") as file:
         return json.load(file)["cases"]
@@ -15,3 +14,8 @@ def build_input(case, seed=0):
     )
 
     return SolveInput(blocks=blocks, capacity=case["capacity"], seed=seed)
+
+def expected_granted_count(expected):
+    if "granted" in expected:
+        return len(expected["granted"])
+    return expected["granted_count"]
