@@ -1,10 +1,8 @@
 import random
 from itertools import combinations, pairwise
 
-from simulation.config import SimulatorConfig
+from simulation.config import SimulationConfig
 from solver.blocks import build_blocks
-
-DEFAULT_DAYS = ("T2", "T3", "T4", "T5", "T6", "T7")
 
 def is_continguous(orders):
     return all(later - earlier == 1 for earlier, later in pairwise(orders))
@@ -44,8 +42,8 @@ def generate_timetable(num_students, config, rng):
     entries = []
     for i in range(1, num_students + 1):
         student_id = f"{i:08d}"
-        num_days = rng.choices(day_counts, weights=config.days_weight_distribution)[0]
-        chosen_days = sorted(rng.sample(config.days, num_days), key = config.day.index)
+        num_days = rng.choices(day_counts, weights=config.days_weights_distribution)[0]
+        chosen_days = sorted(rng.sample(config.days, num_days), key = config.days.index)
 
         for day in chosen_days:
             for order in day_orders(config, patterns, rng):
@@ -55,20 +53,23 @@ def generate_timetable(num_students, config, rng):
 
 def generate_requests(blocks, config, rng):
     """
-    Khởi tạo lịch muốn dky đi xe máy ngẫu nhiên từ TKB
+    Khởi tạo lịch dky đi xe máy ngẫu nhiên từ TKB
     """
     use_motorbike = {}
     requests = []
     for block in blocks:
         if block.student_id not in use_motorbike:
             use_motorbike[block.student_id] = rng.random() < config.motorbike_usage_rate
-        wants = use_motorbike[block.student_id] and rng.random() < config.register_rate
-        requests.append((block.block_id, wants))
+        registration = use_motorbike[block.student_id] and rng.random() < config.register_rate
+        requests.append((block.block_id, registration))
     return requests
 
 def generate_dataset(num_students, config=None, seed=0):
+    """
+    Thực hiện các hàm khởi tạo
+    """
     if config is None:
-        config = SimulatorConfig()
+        config = SimulationConfig()
     rng = random.Random(seed)
     entries = generate_timetable(num_students, config, rng)
     blocks = build_blocks(entries)

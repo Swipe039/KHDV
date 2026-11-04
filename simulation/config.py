@@ -1,10 +1,10 @@
 """
 Các tham số mặc định cho việc sinh dataset giả lập
 """
-from dataclass import dataclass
+from dataclasses import dataclass
 
 @dataclass(frozen=True)
-class SimulatorConfig:
+class SimulationConfig:
     days: tuple[str, ...] = ("T2", "T3", "T4", "T5", "T6", "T7")
     sessions_per_day: int = 4
     motorbike_usage_rate: float = 0.8 #Tỉ lệ số SV sử dụng xe máy trên tổng số SV

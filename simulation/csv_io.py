@@ -19,8 +19,8 @@ def write_dataset(directory, entries, requests):
 
     with open(directory / REQUESTS_FILE, "w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
-        writer.writerow(["block_id", "wants_motorbike"])
-        writer.writerows((block_id, int(wants)) for block_id, wants in requests)
+        writer.writerow(["block_id", "registration"])
+        writer.writerows((block_id, int(registration)) for block_id, registration in requests)
 
 def read_timetable(directory):
     """
@@ -38,19 +38,19 @@ def read_requests(directory):
     """
     with open(Path(directory) / REQUESTS_FILE, newline="", encoding="utf-8") as file:
         return {
-            row["block_id"]: row["wants_motorbike"] == "1" for row in csv.DictReader(file) 
+            row["block_id"]: row["registration"] == "1" for row in csv.DictReader(file) 
         }
 
 def load_solve_input(directory, capacity, seed=0):
     """
-    Đọc dữ liệu dataset từ file và tạo các blocks, sau đó chỉ giữ lại những block mà SV chọn sẽ đi xe máy
+    Đọc dữ liệu dataset từ file và tạo các blocks, sau đó chỉ giữ lại những block mà SV dky sẽ đi xe máy
     """
     entries = read_timetable(directory)
-    wants = read_requests(directory)
+    registration = read_requests(directory)
     blocks = build_blocks(entries)
     block_ids = {block.block_id for block in blocks}
-    if set(wants) != block_ids:
+    if set(registration) != block_ids:
         raise ValueError("requests.csv does not match blocks built from timetable.csv")
-    selected_blocks = tuple(block for block in blocks if wants.get(block.block_id, False))
+    selected_blocks = tuple(block for block in blocks if registration.get(block.block_id, False))
 
     return SolveInput(blocks=selected_blocks, capacity=capacity, seed=seed)
