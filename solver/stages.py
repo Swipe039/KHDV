@@ -26,7 +26,7 @@ def group_block_ids_by_student(blocks):
     return block_ids_by_student
 
 def extract_level_counts(reports):
-    return [reports.count for report in reports if report.count > 0]
+    return [report.count for report in reports if report.count > 0]
 
 def solve_fairness_stage(model, y, blocks, time_limit_per_level=60.0, on_level=None):
     """
