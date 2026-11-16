@@ -101,3 +101,13 @@ def solve_weighted_fairness(model, y, blocks, base=4, time_limit=60.0):
         value, bound, solver.status_name(status), seconds, level_counts
     )
     return report, values
+
+def deviation_bound(level_counts, weights, flags):
+    for index, flag in enumerate(flags):
+        if not flag:
+            tail = sum(
+                weights[later] * level_counts[later]
+                for later in range(index + 1, len(level_counts))
+            )
+            return index + 1, tail // weights[index]
+    return None
