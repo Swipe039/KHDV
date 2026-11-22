@@ -108,7 +108,7 @@ def random_weights(blocks, seed, max_weight=1000):
     }
 
 
-def solve_weighted_stage(model, y, weights, time_limit=60.0):
+def solve_weighted_stage(model, y, weights, time_limit=60.0, num_workers=0):
     if not weights:
         return ObjectiveReport(0, 0, "OPTIMAL", 0.0), {}
 
@@ -119,6 +119,8 @@ def solve_weighted_stage(model, y, weights, time_limit=60.0):
     )
     model.maximize(expression)
     solver = cp_model.CpSolver()
+    solver.parameters.num_workers = num_workers
+    
     solver.parameters.max_time_in_seconds = time_limit
     started = time.perf_counter()
     status = solver.solve(model)

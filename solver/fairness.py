@@ -50,7 +50,7 @@ def certified_prefix(flags):
     return prefix
 
 
-def solve_weighted_fairness(model, y, blocks, base=4, time_limit=60.0):
+def solve_weighted_fairness(model, y, blocks, base=4, time_limit=60.0, num_workers=0):
     block_ids_by_student = group_block_ids_by_student(blocks)
     max_level = max((len(ids) for ids in block_ids_by_student.values()), default=0)
     if max_level == 0:
@@ -79,6 +79,8 @@ def solve_weighted_fairness(model, y, blocks, base=4, time_limit=60.0):
     expression = cp_model.LinearExpr.weighted_sum(terms, coefficients)
     model.maximize(expression)
     solver = cp_model.CpSolver()
+    solver.parameters.num_workers = num_workers
+    
     solver.parameters.max_time_in_seconds = time_limit
     started = time.perf_counter()
     status = solver.solve(model)
@@ -93,7 +95,11 @@ def solve_weighted_fairness(model, y, blocks, base=4, time_limit=60.0):
         for target in range(1, max_level + 1)
     )
     values = extract_values(solver, y)
-    model.add(expression >= value)
+    for target in range(1, max_level + 1):
+        model.add(
+            sum(var for (_, level), var in x.items() if level == target)
+            >= level_counts[target - 1]
+        )
     model.clear_hints()
     for block_id, var in y.items():
         model.add_hint(var, values[block_id])
@@ -111,3 +117,8 @@ def deviation_bound(level_counts, weights, flags):
             )
             return index + 1, tail // weights[index]
     return None
+
+def proven_prefix(report, flags):
+    if report.status != "OPTIMAL":
+        return 0
+    return certified_prefix(flags)
