@@ -3,14 +3,7 @@ import sys
 from simulation.csv_io import load_solve_input
 from simulation.experiments.demand_stats import session_demand
 from simulation.experiments.measure_fairness import resolve_capacity
-from solver.fairness import (
-    certified_prefix,
-    deviation_bound,
-    integer_level_weights,
-    lexicographic_flags,
-    solve_weighted_fairness,
-    trivial_level_caps,
-)
+from solver.fairness import *
 from solver.model import build_model
 
 
@@ -39,7 +32,7 @@ def main():
         deviation = deviation_bound(report.level_counts, weights, flags)
         print(
             f"base={base} status={report.status} gap={report.bound - report.value} "
-            f"seconds={report.seconds:.1f} certified_prefix={certified_prefix(flags)} "
+            f"seconds={report.seconds:.1f} certified_prefix={proven_prefix(report, flags)} "
             f"deviation={deviation}",
             flush=True,
         )
