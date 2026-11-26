@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dữ liệu mẫu gửi xe</title>
+</head>
+<body>
+  <h1>Dữ liệu mẫu gửi xe</h1>
+  <p>Nguồn dữ liệu: data/samples/timetable.csv và data/samples/requests.csv.</p>
+  <p>{{ student_count }} sinh viên; {{ registered_count }} block đã đăng ký đi xe máy.</p>
+
+  <nav aria-label="Các bảng dữ liệu mẫu">
+    <ul>
+      {% for table in tables %}
+        <li><a href="#{{ table.name }}">{{ table.title }} ({{ table.count }} dòng)</a></li>
+      {% endfor %}
+    </ul>
+    <p><a href="{% url 'student_list' %}">Xem danh sách sinh viên trong dữ liệu mẫu</a></p>
+  </nav>
+
+  {% for table in tables %}
+    <section id="{{ table.name }}">
+      <h2>{{ table.title }} — {{ table.count }} dòng</h2>
+
+      <table border="1" cellpadding="6">
+        <caption>{{ table.source }}</caption>
+        <thead>
+          <tr>
+            {% for column in table.columns %}
+              <th scope="col">{{ column }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in table.rows %}
+            <tr>
+              {% for value in row %}
+                <td>{{ value }}</td>
+              {% endfor %}
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="{{ table.columns|length }}">Chưa có dữ liệu.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  {% endfor %}
+</body>
+</html>
